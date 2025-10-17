@@ -2,6 +2,7 @@ package com.micro.job.service;
 
 
 import com.micro.job.clients.CompanyClients;
+import com.micro.job.dto.AllJOBDto;
 import com.micro.job.dto.JobDto;
 import com.micro.job.dto.JobRequest;
 import com.micro.job.exception.ResourceNotFoundException;
@@ -9,12 +10,15 @@ import com.micro.job.external.CompanyDto;
 import com.micro.job.model.Job;
 import com.micro.job.repository.JobRepository;
 import com.micro.job.response.Apiresponse;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,13 +26,28 @@ import java.util.List;
 public class JobService {
     private final JobRepository jobRepository;
     private final RestTemplate restTemplate;
-    private  final CompanyClients companyClients;
+    private final CompanyClients companyClients;
 
-    public List<Job> getAllJob() {
+    @CircuitBreaker(name = "companyBreaker")
+    public List<AllJOBDto> getAllJob() {
         List<Job> jobs = jobRepository.findAll();
-        return jobs;
+        List<AllJOBDto> list = jobs.stream()
+                .map(job -> new AllJOBDto(
+                        job.getId(),
+                        job.getTitle(),
+                        job.getDescription(),
+                        job.getMinSalary(),
+                        job.getLocation(),
+                        job.getCompanyId()
+                ))
+                .toList();
+        System.out.println(list);
+        return list;
     }
 
+
+
+    @CircuitBreaker(name = "companyBreaker", fallbackMethod = "companyBreakerFallback")
     public JobDto getJobById(Long id) {
         Job job = jobRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Job not found"));
@@ -53,7 +72,27 @@ public class JobService {
         return jobDto;
 
     }
+    // FIXED: Fallback method must return JobDto and accept (Long id, Exception exception)
+    public JobDto companyBreakerFallback(Long id, Exception exception) {
+        log.error("Circuit breaker fallback triggered for job id: {}. Error: {}", id, exception.getMessage());
 
+        // Return job details without company information
+        Job job = jobRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Job not found"));
+
+        JobDto jobDto = new JobDto();
+        jobDto.setId(job.getId());
+        jobDto.setTitle(job.getTitle());
+        jobDto.setDescription(job.getDescription());
+        jobDto.setMinSalary(job.getMinSalary());
+        jobDto.setLocation(job.getLocation());
+
+        // Set default values for company info since service is down
+        jobDto.setName("Company service unavailable");
+        jobDto.setDescription("Please try again later");
+
+        return jobDto;
+    }
 
     public Job createJob(JobRequest jobRequest) {
         try {

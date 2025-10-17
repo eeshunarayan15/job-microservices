@@ -1,6 +1,7 @@
 package com.micro.job.controller;
 
 
+import com.micro.job.dto.AllJOBDto;
 import com.micro.job.dto.JobDto;
 import com.micro.job.dto.JobRequest;
 import com.micro.job.model.Job;
@@ -24,7 +25,7 @@ public class JobController {
     @GetMapping("/jobs")
     public ResponseEntity<Apiresponse<Object>> getAllJob() {
         try {
-            List<Job> allJob = jobService.getAllJob();
+            List<AllJOBDto> allJob = jobService.getAllJob();
             Apiresponse<Object> apiresponse = new Apiresponse<>("SUCCESS", "JOB FOUND SUCCESSFULLY", allJob);
             return status(HttpStatus.OK).body(apiresponse);
         } catch (Exception e) {
