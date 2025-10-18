@@ -48,6 +48,10 @@ dependencies {
 //    https://mvnrepository.com/artifact/io.github.openfeign/feign-micrometer
     implementation("io.github.openfeign:feign-micrometer:13.6")
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.amqp:spring-rabbit-test'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 }
 dependencyManagement {
     imports {

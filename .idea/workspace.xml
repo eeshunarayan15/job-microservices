@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="7f8459ac-b887-4491-a677-e001d445c3b3" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/application.main.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apigateway/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/apigateway/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apigateway/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/apigateway/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/company/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/company/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company/src/main/java/com/micro/company/CompanyApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/company/src/main/java/com/micro/company/CompanyApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company/src/main/java/com/micro/company/model/Company.java" beforeDir="false" afterPath="$PROJECT_DIR$/company/src/main/java/com/micro/company/model/Company.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company/src/main/java/com/micro/company/respone/Apiresponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/company/src/main/java/com/micro/company/respone/Apiresponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company/src/main/java/com/micro/company/service/CompanyService.java" beforeDir="false" afterPath="$PROJECT_DIR$/company/src/main/java/com/micro/company/service/CompanyService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company/src/main/java/com/micro/company/service/CompanyServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/company/src/main/java/com/micro/company/service/CompanyServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/company/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/job/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/job/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/job/src/main/java/com/micro/job/service/JobService.java" beforeDir="false" afterPath="$PROJECT_DIR$/job/src/main/java/com/micro/job/service/JobService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/job/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/job/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notes.txt" beforeDir="false" afterPath="$PROJECT_DIR$/notes.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reviews/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/reviews/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reviews/src/main/java/com/micro/reviews/controller/ReviewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/reviews/src/main/java/com/micro/reviews/controller/ReviewController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reviews/src/main/java/com/micro/reviews/service/ReviewService.java" beforeDir="false" afterPath="$PROJECT_DIR$/reviews/src/main/java/com/micro/reviews/service/ReviewService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reviews/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/reviews/src/main/resources/application.properties" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$/apigateway">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$/application">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$/company">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$/configserver">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$/job">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$/registry">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$/reviews">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$/company">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Dockerfile" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="33z4OQVYzpjNLCjOkJWMxunHfTo" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Gradle.Build apigateway.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build company.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build configserver.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build job.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build registry.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build reviews.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Download Sources.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Notification.DisplayName-DoNotAsk-DatabaseConfigFileWatcher.found&quot;: &quot;New/updated database configurations found&quot;,
+    &quot;Notification.DoNotAsk-DatabaseConfigFileWatcher.found&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Spring Boot.ApigatewayApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.CompanyApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ConfigserverApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.JobApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.RegistryApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ReviewsApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/eeshu/Downloads/application/company/src/main/java/com/micro/company&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15859374&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;settings.build.tools.auto.reload&quot;: &quot;SELECTIVE&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;settings.editor.splitter.proportion&quot;: &quot;0.33468723&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\eeshu\Downloads\application\company\src\main\java\com\micro\company" />
+      <recent name="C:\Users\eeshu\Downloads\application\company\src\main\java\com\micro\company\dto" />
+      <recent name="C:\Users\eeshu\Downloads\application\job\src\main\java\com\micro\job" />
+      <recent name="C:\Users\eeshu\Downloads\application\reviews\src\main\java\com\micro\reviews" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.micro.reviews.dto.external" />
+      <recent name="com.micro.reviews.clients" />
+      <recent name="com.micro.job.external" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="configurationTypes">
+      <set>
+        <option value="KtorApplicationConfigurationType" />
+        <option value="MicronautRunConfigurationType" />
+        <option value="QuarkusRunConfigurationType" />
+        <option value="SpringBootApplicationConfigurationType" />
+      </set>
+    </option>
+    <option name="configurationStatuses">
+      <map>
+        <entry key="SpringBootApplicationConfigurationType">
+          <value>
+            <map>
+              <entry key="ApigatewayApplication" value="STOPPED" />
+              <entry key="CompanyApplication" value="STOPPED" />
+              <entry key="ConfigserverApplication" value="STOPPED" />
+              <entry key="JobApplication" value="STOPPED" />
+              <entry key="RegistryApplication" value="STOPPED" />
+              <entry key="ReviewsApplication" value="STOPPED" />
+            </map>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="RunManager" selected="Spring Boot.JobApplication">
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="job" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
+    <configuration name="ApigatewayApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="apigateway.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.micro.apigateway.ApigatewayApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="application.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.job.application.Application" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CompanyApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="company.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.micro.company.CompanyApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ConfigserverApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="configserver.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.micro.configserver.ConfigserverApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="JobApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="job.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.micro.job.JobApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RegistryApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="registry.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.micro.registry.RegistryApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ReviewsApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="reviews.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.micro.reviews.ReviewsApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Spring Boot.ApigatewayApplication" />
+      <item itemvalue="Spring Boot.RegistryApplication" />
+      <item itemvalue="Spring Boot.ConfigserverApplication" />
+      <item itemvalue="Spring Boot.Application" />
+      <item itemvalue="Spring Boot.CompanyApplication" />
+      <item itemvalue="Spring Boot.JobApplication" />
+      <item itemvalue="Spring Boot.ReviewsApplication" />
+    </list>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.23892.409" />
+        <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-IU-252.23892.409" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SshConsoleOptionsProvider">
+    <option name="myEncoding" value="UTF-8" />
+    <option name="myConnectionType" value="CURRENT_VAGRANT" />
+    <option name="myConnectionId" value="" />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7f8459ac-b887-4491-a677-e001d445c3b3" name="Changes" comment="" />
+      <created>1760306535465</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1760306535465</updated>
+      <workItem from="1760306537504" duration="486000" />
+      <workItem from="1760331475156" duration="903000" />
+      <workItem from="1760332422182" duration="390000" />
+      <workItem from="1760332896365" duration="3664000" />
+      <workItem from="1760339698666" duration="264000" />
+      <workItem from="1760339975265" duration="588000" />
+      <workItem from="1760341662021" duration="998000" />
+      <workItem from="1760342695992" duration="2811000" />
+      <workItem from="1760371898713" duration="16681000" />
+      <workItem from="1760459636356" duration="5481000" />
+      <workItem from="1760466190014" duration="2887000" />
+      <workItem from="1760498894550" duration="8481000" />
+      <workItem from="1760541414923" duration="9047000" />
+      <workItem from="1760587891335" duration="179000" />
+      <workItem from="1760588153767" duration="7388000" />
+      <workItem from="1760630840004" duration="424000" />
+      <workItem from="1760631364360" duration="1024000" />
+      <workItem from="1760632502634" duration="6529000" />
+      <workItem from="1760651089121" duration="2061000" />
+      <workItem from="1760677904306" duration="8226000" />
+      <workItem from="1760692521020" duration="3969000" />
+      <workItem from="1760723935350" duration="128000" />
+      <workItem from="1760724090599" duration="7984000" />
+      <workItem from="1760781366018" duration="1479000" />
+      <workItem from="1760782888683" duration="3851000" />
+      <workItem from="1760813430275" duration="364000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

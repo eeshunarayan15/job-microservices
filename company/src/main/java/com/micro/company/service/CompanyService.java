@@ -1,5 +1,6 @@
 package com.micro.company.service;
 import com.micro.company.dto.CompanyDto;
+import com.micro.company.dto.ReviewMessage;
 import com.micro.company.model.Company;
 import com.micro.company.repository.CompanyRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,4 +19,5 @@ public interface CompanyService {
     public Company updateCompany(Long id, CompanyDto companyDto);
     public void deleteCompany(Long id);
 
+    void updateCompanyRating(ReviewMessage reviewMessage);
 }

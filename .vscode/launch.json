@@ -1,0 +1,35 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-RegistryApplication<registry>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.micro.registry.RegistryApplication",
+      "projectName": "registry",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env",
+      "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=56374 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=registry"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-JobApplication<job>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.micro.job.JobApplication",
+      "projectName": "job",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-ReviewsApplication<reviews>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.micro.reviews.ReviewsApplication",
+      "projectName": "reviews",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}

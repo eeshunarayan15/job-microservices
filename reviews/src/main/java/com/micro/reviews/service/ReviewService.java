@@ -6,6 +6,7 @@ import com.micro.reviews.dto.ReviewRequest;
 import com.micro.reviews.dto.ReviewResponseDto;
 import com.micro.reviews.dto.external.CompanyDto;
 import com.micro.reviews.exception.ResourceNotFoundException;
+import com.micro.reviews.messaging.ReviewMessageProducer;
 import com.micro.reviews.model.Review;
 import com.micro.reviews.repository.ReviewRepository;
 import com.micro.reviews.response.Apiresponse;
@@ -22,7 +23,8 @@ import java.util.List;
 public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final CompanyClients companyClients;
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
+    private  final ReviewMessageProducer reviewMessageProducer;
 
 
     public List<ReviewResponseDto> getAllReviews(Long companyId) {
@@ -68,7 +70,7 @@ return  list;
 
 
     }
-    public ReviewResponseDto createReview(Long companyId, ReviewRequest reviewRequest) {
+    public Review createReview(Long companyId, ReviewRequest reviewRequest) {
         Apiresponse<CompanyDto> companyById = companyClients.getCompanyById(companyId);
         CompanyDto data = companyById.getData();
         if (companyById.getData() == null) {
@@ -78,13 +80,13 @@ return  list;
         Review review = Review.builder()
                 .title(reviewRequest.getTitle())
                 .description(reviewRequest.getDescription())
-                .companyId(companyId)
+                .companyId(data.getId())
                 .rating(reviewRequest
                 .getRating()).
                 build();
         Review savedReview = reviewRepository.save(review);
 
-        return new ReviewResponseDto(savedReview.getId(), savedReview.getTitle(), savedReview.getDescription(), savedReview.getRating(), savedReview.getCompanyId());
+        return savedReview;
 
 
     }

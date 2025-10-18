@@ -1,28 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.40/398c6d2d7c42c96b65e78d2ddc9be0058c163453/lombok-1.18.40.jar" />
+        </processorPath>
+        <module name="company.main" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel target="17" />
+  </component>
   <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="apigateway" options="-parameters" />
-      <module name="apigateway.main" options="-parameters" />
-      <module name="apigateway.test" options="-parameters" />
-      <module name="application" options="-parameters" />
-      <module name="application.main" options="-parameters" />
-      <module name="application.test" options="-parameters" />
-      <module name="company" options="-parameters" />
-      <module name="company.main" options="-parameters" />
-      <module name="company.test" options="-parameters" />
-      <module name="configserver" options="-parameters" />
-      <module name="configserver.main" options="-parameters" />
-      <module name="configserver.test" options="-parameters" />
-      <module name="job" options="-parameters" />
-      <module name="job.main" options="-parameters" />
-      <module name="job.test" options="-parameters" />
-      <module name="registry" options="-parameters" />
-      <module name="registry.main" options="-parameters" />
-      <module name="registry.test" options="-parameters" />
-      <module name="reviews" options="-parameters" />
-      <module name="reviews.main" options="-parameters" />
-      <module name="reviews.test" options="-parameters" />
-    </option>
+    <option name="ADDITIONAL_OPTIONS_STRING" value="-parameters" />
   </component>
 </project>

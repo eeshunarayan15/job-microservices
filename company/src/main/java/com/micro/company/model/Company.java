@@ -19,8 +19,6 @@ public class Company {
     private long id;
     private String name;
     private  String description;
-
-
-
+    private  Double averagerating=0.0;
 
 }

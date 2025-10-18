@@ -11,6 +11,7 @@ import com.micro.job.model.Job;
 import com.micro.job.repository.JobRepository;
 import com.micro.job.response.Apiresponse;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ public class JobService {
     private final JobRepository jobRepository;
     private final RestTemplate restTemplate;
     private final CompanyClients companyClients;
+    int attempt=0;
 
     @CircuitBreaker(name = "companyBreaker")
     public List<AllJOBDto> getAllJob() {
@@ -47,8 +49,13 @@ public class JobService {
 
 
 
-    @CircuitBreaker(name = "companyBreaker", fallbackMethod = "companyBreakerFallback")
+    // IMPORTANT: Retry should be BEFORE CircuitBreaker in the execution chain
+    // This means CircuitBreaker annotation comes first (outer), Retry second (inner)
+    @Retry(name = "companyBreaker")
+    @CircuitBreaker(name = "companyBreaker")
     public JobDto getJobById(Long id) {
+        System.out.println("Attempt"+ ++attempt);
+
         Job job = jobRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Job not found"));
         CompanyDto company = restTemplate.getForObject(
@@ -71,6 +78,12 @@ public class JobService {
         jobDto.setDescription(company.getDescription());
         return jobDto;
 
+    }
+    // Retry fallback - called after all retry attempts are exhausted
+    public JobDto companyRetryFallback(Long id, Exception exception) {
+        log.warn("All retry attempts exhausted for job id: {}. Error: {}", id, exception.getMessage());
+        // Re-throw to trigger circuit breaker fallback
+        throw new RuntimeException("Retries exhausted", exception);
     }
     // FIXED: Fallback method must return JobDto and accept (Long id, Exception exception)
     public JobDto companyBreakerFallback(Long id, Exception exception) {
