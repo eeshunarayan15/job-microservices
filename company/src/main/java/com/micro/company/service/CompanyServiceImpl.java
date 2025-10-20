@@ -3,6 +3,7 @@ package com.micro.company.service;
 import com.micro.company.client.ReviewClient;
 import com.micro.company.dto.CompanyDto;
 import com.micro.company.dto.ReviewMessage;
+import com.micro.company.exception.DublicateResourceException;
 import com.micro.company.exception.ResourceNotFoundException;
 import com.micro.company.model.Company;
 import com.micro.company.repository.CompanyRepository;
@@ -28,22 +29,38 @@ public class CompanyServiceImpl implements CompanyService {
                 new CompanyDto(
                         company.getId(),
                         company.getName(),
-                        company.getDescription()
+                        company.getDescription(),
+                        company.getAveragerating()
                 )).toList();
-return  list;
+        return list;
     }
 
     @Override
     public Company createCompany(CompanyDto companyDto) {
+        log.info("Attempting to create company with name: {}", companyDto.getName());
+
+        // Check if company with same name already exists
+        if (companyRepository.existsByName(companyDto.getName())) {
+            log.warn("Company creation failed - duplicate name: {}", companyDto.getName());
+            throw new DublicateResourceException(
+                    "Company with name '" + companyDto.getName() + "' already exists"
+            );
+        }
+
+        // Build the company entity
         Company company = Company.builder()
-                .name(companyDto.getName())
-                .description(companyDto.getDescription())
+                .name(companyDto.getName().trim())
+                .description(companyDto.getDescription().trim())
+                .averagerating(0.0) // Explicitly set default rating
                 .build();
-        Company save = companyRepository.save(company);
 
-        log.info("Company {} is saved", company.getId());
+        // Save to database
+        Company savedCompany = companyRepository.save(company);
 
-        return company;
+        log.info("Company created successfully with ID: {} and name: {}",
+                savedCompany.getId(), savedCompany.getName());
+
+        return savedCompany;
     }
 
     @Override

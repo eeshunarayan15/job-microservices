@@ -70,3 +70,6 @@ dependencyManagement {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+bootBuildImage {
+    builder = "paketobuildpacks/builder-jammy-base:latest"
+}
