@@ -5,16 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7f8459ac-b887-4491-a677-e001d445c3b3" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apigateway/src/main/resources/application-docker.properties" beforeDir="false" afterPath="$PROJECT_DIR$/apigateway/src/main/resources/application-docker.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/company/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company/src/main/resources/application-docker.properties" beforeDir="false" afterPath="$PROJECT_DIR$/company/src/main/resources/application-docker.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/company/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/configserver/src/main/resources/application-docker.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/configserver/src/main/resources/application.properties" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/registry/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/registry/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/job/src/main/resources/application-docker.properties" beforeDir="false" afterPath="$PROJECT_DIR$/job/src/main/resources/application-docker.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/job/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/job/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -283,7 +277,7 @@
       <workItem from="1760724090599" duration="7984000" />
       <workItem from="1760781366018" duration="1479000" />
       <workItem from="1760782888683" duration="3851000" />
-      <workItem from="1760813430275" duration="28431000" />
+      <workItem from="1760813430275" duration="31839000" />
     </task>
     <servers />
   </component>

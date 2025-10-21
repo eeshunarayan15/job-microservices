@@ -15,7 +15,7 @@ services:
     networks:
       - my-microservice-network
 
-  # 2. Config Server
+  # 2. Config Server <--- UPDATED WITH HEALTHCHECK
   configserver:
     container_name: configserver
     image: eeshunarayan15/configserver:latest
@@ -23,7 +23,12 @@ services:
       - "8088:8088"
     depends_on:
       eureka-server:
-        condition: service_healthy
+        condition: service_healthy # Wait for Eureka to be healthy
+    healthcheck: # <--- NEW HEALTHCHECK
+      test: ["CMD", "curl", "-f", "http://localhost:8088/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     command: ["java", "-jar", "app.jar", "--spring.profiles.active=docker"]
     networks:
       - my-microservice-network
@@ -38,7 +43,7 @@ services:
       eureka-server:
         condition: service_healthy
       configserver:
-        condition: service_started
+        condition: service_healthy # <--- NOW WAITS FOR CONFIG SERVER HEALTHY
     networks:
       - my-microservice-network
 
@@ -75,7 +80,6 @@ services:
       POSTGRES_PASSWORD: companypass
       POSTGRES_DB: companydb
     ports:
-      # *** REVERTED: Using default host port 5432 for testing/local consistency ***
       - "5432:5432"
     networks:
       - my-microservice-network
@@ -85,17 +89,14 @@ services:
   # 7. Company Microservice
   company:
     container_name: company
-    # NOTE: Ensure you have built this image successfully!
     image: eeshunarayan15/company:latest
     ports:
       - "8081:8081"
     depends_on:
-      # Core Infrastructure
       eureka-server:
         condition: service_healthy
       configserver:
-        condition: service_started
-      # Dedicated Dependencies
+        condition: service_healthy # <--- NOW WAITS FOR CONFIG SERVER HEALTHY
       companydb:
         condition: service_started
       rabbitmq:
@@ -106,6 +107,77 @@ services:
     networks:
       - my-microservice-network
 
+  # 8. Job Database (PostgreSQL)
+  jobdb:
+    container_name: jobdb
+    image: postgres:15
+    environment:
+      POSTGRES_USER: jobuser
+      POSTGRES_PASSWORD: jobpass
+      POSTGRES_DB: jobdb
+    ports:
+      - "5433:5432"
+    networks:
+      - my-microservice-network
+    volumes:
+      - job-data:/var/lib/postgresql/data
+
+  # 9. Job Microservice <--- DEPENDS ON HEALTHY CONFIG SERVER
+  job:
+    container_name: job
+    image: eeshunarayan15/job:latest
+    ports:
+      - "8082:8082"
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+      configserver:
+        condition: service_healthy # <--- NOW WAITS FOR CONFIG SERVER HEALTHY
+      zipkin:
+        condition: service_started
+      jobdb:
+        condition: service_started
+    command: ["java", "-jar", "app.jar", "--spring.profiles.active=docker"]
+    networks:
+      - my-microservice-network
+
+  # 10. Review Database (PostgreSQL)
+#  reviewdb:
+#    container_name: reviewdb
+#    image: postgres:15
+#    environment:
+#      POSTGRES_USER: reviewuser
+#      POSTGRES_PASSWORD: reviewpass
+#      POSTGRES_DB: reviewdb
+#    ports:
+#      - "5434:5432"
+#    networks:
+#      - my-microservice-network
+#    volumes:
+#      - review-data:/var/lib/postgresql/data
+#
+#  # 11. Review Microservice
+#  review:
+#    container_name: review
+#    image: eeshunarayan15/review:latest
+#    ports:
+#      - "8083:8083"
+#    depends_on:
+#      eureka-server:
+#        condition: service_healthy
+#      configserver:
+#        condition: service_healthy # <--- NOW WAITS FOR CONFIG SERVER HEALTHY
+#      zipkin:
+#        condition: service_started
+#      reviewdb:
+#        condition: service_started
+#      rabbitmq:
+#        condition: service_started
+#    command: ["java", "-jar", "app.jar", "--spring.profiles.active=docker"]
+#    networks:
+#      - my-microservice-network
+
+
 # Define the shared network
 networks:
   my-microservice-network:
@@ -114,3 +186,5 @@ networks:
 # Define volumes for persistent storage
 volumes:
   company-data:
+  job-data:
+#  review-data:
