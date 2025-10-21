@@ -5,23 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7f8459ac-b887-4491-a677-e001d445c3b3" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apigateway/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/apigateway/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/company/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company/src/main/java/com/micro/company/client/ReviewClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/company/src/main/java/com/micro/company/client/ReviewClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company/src/main/java/com/micro/company/dto/CompanyDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/company/src/main/java/com/micro/company/dto/CompanyDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company/src/main/java/com/micro/company/repository/CompanyRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/company/src/main/java/com/micro/company/repository/CompanyRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company/src/main/java/com/micro/company/service/CompanyServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/company/src/main/java/com/micro/company/service/CompanyServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/configserver/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/configserver/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/job/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/job/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/job/src/main/java/com/micro/job/clients/CompanyClients.java" beforeDir="false" afterPath="$PROJECT_DIR$/job/src/main/java/com/micro/job/clients/CompanyClients.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/job/src/main/java/com/micro/job/clients/ReviewClients.java" beforeDir="false" afterPath="$PROJECT_DIR$/job/src/main/java/com/micro/job/clients/ReviewClients.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/job/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/job/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notes.txt" beforeDir="false" afterPath="$PROJECT_DIR$/notes.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/registry/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/registry/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reviews/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/reviews/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reviews/src/main/java/com/micro/reviews/clients/CompanyClients.java" beforeDir="false" afterPath="$PROJECT_DIR$/reviews/src/main/java/com/micro/reviews/clients/CompanyClients.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reviews/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/reviews/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apigateway/src/main/resources/application-docker.properties" beforeDir="false" afterPath="$PROJECT_DIR$/apigateway/src/main/resources/application-docker.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/company/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company/src/main/resources/application-docker.properties" beforeDir="false" afterPath="$PROJECT_DIR$/company/src/main/resources/application-docker.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/company/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/configserver/src/main/resources/application-docker.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/configserver/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/registry/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/registry/Dockerfile" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,7 +111,7 @@
     "git-widget-placeholder": "main",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/eeshu/Downloads/application/apigateway/src/main/resources",
+    "last_opened_file_path": "C:/Users/eeshu/Downloads/application/registry/src/main/resources",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -137,11 +130,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\eeshu\Downloads\application\registry\src\main\resources" />
       <recent name="C:\Users\eeshu\Downloads\application\apigateway\src\main\resources" />
       <recent name="C:\Users\eeshu\Downloads\application\configserver\src\main\resources" />
       <recent name="C:\Users\eeshu\Downloads\application\reviews\src\main\resources" />
       <recent name="C:\Users\eeshu\Downloads\application\company\src\main\resources" />
-      <recent name="C:\Users\eeshu\Downloads\application\company\src\main\java\com\micro\company" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.micro.reviews.dto.external" />
@@ -164,7 +157,7 @@
           <value>
             <map>
               <entry key="ApigatewayApplication" value="STOPPED" />
-              <entry key="CompanyApplication" value="STOPPED" />
+              <entry key="CompanyApplication" value="FAILED" />
               <entry key="ConfigserverApplication" value="STOPPED" />
               <entry key="JobApplication" value="STOPPED" />
               <entry key="RegistryApplication" value="STOPPED" />
@@ -290,7 +283,7 @@
       <workItem from="1760724090599" duration="7984000" />
       <workItem from="1760781366018" duration="1479000" />
       <workItem from="1760782888683" duration="3851000" />
-      <workItem from="1760813430275" duration="14120000" />
+      <workItem from="1760813430275" duration="28431000" />
     </task>
     <servers />
   </component>

@@ -1,0 +1,4 @@
+docker build -t eeshunarayan15/registry:latest .
+docker run -p 8761:8761 -e SPRING_PROFILES_ACTIVE=docker eeshunarayan15/registry:latest
+
+

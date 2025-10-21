@@ -7,7 +7,7 @@ COPY src ./src
 RUN gradle build bootJar --no-daemon
 
 # Stage 2: Create the final, lightweight image
-# This stage uses a minimal Java-only runtime for security and size
+# This stage uses a minimal Java-only runtime
 FROM eclipse-temurin:17-jre-jammy
 WORKDIR /app
 
@@ -15,7 +15,7 @@ WORKDIR /app
 COPY --from=build /home/gradle/src/build/libs/*.jar app.jar
 
 # Expose the correct port from your properties
-EXPOSE 8761
+EXPOSE 8085
 
 # Run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar", "--spring.profiles.active=docker"]

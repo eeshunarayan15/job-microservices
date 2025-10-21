@@ -1,259 +1,116 @@
 version: '3.8'
 
 services:
-  # ==================== DATABASES ====================
-
-  postgres-company:
-    image: postgres:15-alpine
-    container_name: postgres-company
-    environment:
-      POSTGRES_DB: companydb
-      POSTGRES_USER: company_user
-      POSTGRES_PASSWORD: company_pass
-      TZ: UTC
-      PGTZ: UTC
+  # 1. Eureka Service Registry
+  eureka-server:
+    container_name: eureka-server
+    image: eeshunarayan15/registry:latest
     ports:
-      - "5432:5432"
-    volumes:
-      - company-data:/var/lib/postgresql/data
-    networks:
-      - microservices-net
+      - "8761:8761"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U company_user -d companydb"]
-      interval: 10s
-      timeout: 5s
+      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      interval: 30s
+      timeout: 10s
       retries: 5
+    networks:
+      - my-microservice-network
 
-  postgres-job:
-    image: postgres:15-alpine
-    container_name: postgres-job
-    environment:
-      POSTGRES_DB: jobdb
-      POSTGRES_USER: job_user
-      POSTGRES_PASSWORD: job_pass
-      TZ: UTC
-      PGTZ: UTC
+  # 2. Config Server
+  configserver:
+    container_name: configserver
+    image: eeshunarayan15/configserver:latest
     ports:
-      - "5433:5432"
-    volumes:
-      - job-data:/var/lib/postgresql/data
+      - "8088:8088"
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    command: ["java", "-jar", "app.jar", "--spring.profiles.active=docker"]
     networks:
-      - microservices-net
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U job_user -d jobdb"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      - my-microservice-network
 
-  postgres-review:
-    image: postgres:15-alpine
-    container_name: postgres-review
-    environment:
-      POSTGRES_DB: reviewdb
-      POSTGRES_USER: review_user
-      POSTGRES_PASSWORD: review_pass
-      TZ: UTC
-      PGTZ: UTC
+  # 3. API Gateway
+  apigateway:
+    container_name: apigateway
+    image: eeshunarayan15/apigateway:latest
     ports:
-      - "5434:5432"
-    volumes:
-      - review-data:/var/lib/postgresql/data
+      - "8080:8085"
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+      configserver:
+        condition: service_started
     networks:
-      - microservices-net
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U review_user -d reviewdb"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      - my-microservice-network
 
-  # ==================== INFRASTRUCTURE ====================
-
+  # 4. RabbitMQ Message Broker
   rabbitmq:
-    image: rabbitmq:3-management-alpine
     container_name: rabbitmq
+    image: rabbitmq:3-management
     environment:
+      # These credentials are used by the 'company' service
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
     ports:
-      - "5672:5672"
-      - "15672:15672"
-    volumes:
-      - rabbitmq-data:/var/lib/rabbitmq
+      - "5672:5672"   # Standard AMQP port
+      - "15672:15672" # Management UI (http://localhost:15672)
     networks:
-      - microservices-net
-    healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "ping"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
+      - my-microservice-network
 
-  redis:
-    image: redis:7-alpine
-    container_name: redis
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis-data:/data
-    networks:
-      - microservices-net
-    command: redis-server --appendonly yes
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
-
+  # 5. Zipkin Distributed Tracing Server
   zipkin:
-    image: openzipkin/zipkin-slim
     container_name: zipkin
+    image: openzipkin/zipkin
     ports:
-      - "9411:9411"
+      - "9411:9411" # Zipkin Web UI (http://localhost:9411)
     networks:
-      - microservices-net
+      - my-microservice-network
+
+  # 6. Company Database (PostgreSQL)
+  companydb:
+    container_name: companydb
+    image: postgres:15
     environment:
-      - STORAGE_TYPE=mem
-
-  # ==================== DISCOVERY & CONFIG ====================
-
-  eureka-server:
-    build:
-      context: ./registry
-      dockerfile: Dockerfile
-    container_name: eureka-server
+      # Database configuration matching application-docker.properties
+      POSTGRES_USER: companyuser
+      POSTGRES_PASSWORD: companypass
+      POSTGRES_DB: companydb
     ports:
-      - "8761:8761"
+      # *** REVERTED: Using default host port 5432 for testing/local consistency ***
+      - "5432:5432"
     networks:
-      - microservices-net
-    environment:
-      - SPRING_PROFILES_ACTIVE=prod
-    healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8761/actuator/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 40s
+      - my-microservice-network
+    volumes:
+      - company-data:/var/lib/postgresql/data
 
-  # ==================== MICROSERVICES ====================
-
-  company-service:
-    build:
-      context: ./company
-      dockerfile: Dockerfile
-    depends_on:
-      postgres-company:
-        condition: service_healthy
-      eureka-server:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
-    networks:
-      - microservices-net
-    environment:
-      - SPRING_PROFILES_ACTIVE=prod
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-company:5432/companydb
-      - SPRING_DATASOURCE_USERNAME=company_user
-      - SPRING_DATASOURCE_PASSWORD=company_pass
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
-    deploy:
-      replicas: 1
-      resources:
-        limits:
-          cpus: '0.5'
-          memory: 512M
-        reservations:
-          cpus: '0.25'
-          memory: 256M
-
-  job-service:
-    build:
-      context: ./job
-      dockerfile: Dockerfile
-    depends_on:
-      postgres-job:
-        condition: service_healthy
-      eureka-server:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
-    networks:
-      - microservices-net
-    environment:
-      - SPRING_PROFILES_ACTIVE=prod
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-job:5432/jobdb
-      - SPRING_DATASOURCE_USERNAME=job_user
-      - SPRING_DATASOURCE_PASSWORD=job_pass
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
-    deploy:
-      replicas: 1
-      resources:
-        limits:
-          cpus: '0.5'
-          memory: 512M
-
-  review-service:
-    build:
-      context: ./reviews
-      dockerfile: Dockerfile
-    depends_on:
-      postgres-review:
-        condition: service_healthy
-      eureka-server:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
-    networks:
-      - microservices-net
-    environment:
-      - SPRING_PROFILES_ACTIVE=prod
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-review:5432/reviewdb
-      - SPRING_DATASOURCE_USERNAME=review_user
-      - SPRING_DATASOURCE_PASSWORD=review_pass
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
-    deploy:
-      replicas: 1
-      resources:
-        limits:
-          cpus: '0.5'
-          memory: 512M
-
-  api-gateway:
-    build:
-      context: ./apigateway
-      dockerfile: Dockerfile
-    container_name: api-gateway
+  # 7. Company Microservice
+  company:
+    container_name: company
+    # NOTE: Ensure you have built this image successfully!
+    image: eeshunarayan15/company:latest
     ports:
-      - "8085:8085"
+      - "8081:8081"
     depends_on:
+      # Core Infrastructure
       eureka-server:
         condition: service_healthy
+      configserver:
+        condition: service_started
+      # Dedicated Dependencies
+      companydb:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+      zipkin:
+        condition: service_started
+    command: ["java", "-jar", "app.jar", "--spring.profiles.active=docker"]
     networks:
-      - microservices-net
-    environment:
-      - SPRING_PROFILES_ACTIVE=prod
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
-      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
+      - my-microservice-network
 
+# Define the shared network
 networks:
-  microservices-net:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.28.0.0/16
+  my-microservice-network:
+    external: true
 
+# Define volumes for persistent storage
 volumes:
   company-data:
-    driver: local
-  job-data:
-    driver: local
-  review-data:
-    driver: local
-  rabbitmq-data:
-    driver: local
-  redis-data:
-    driver: local
