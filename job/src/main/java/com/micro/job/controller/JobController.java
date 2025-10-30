@@ -7,6 +7,7 @@ import com.micro.job.dto.JobRequest;
 import com.micro.job.model.Job;
 import com.micro.job.response.Apiresponse;
 import com.micro.job.service.JobService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,13 +39,13 @@ public class JobController {
     }
 //
     @PostMapping("/jobs")
-    public ResponseEntity<Apiresponse<Job>> createJob(@RequestBody JobRequest jobRequest) {
+    public ResponseEntity<Apiresponse<Job>> createJob(   @Valid @RequestBody JobRequest jobRequest) {
 
             Job job = jobService.createJob(jobRequest);
 
 
-        Apiresponse<Job> jobApiresponse = new Apiresponse<>("ERROR", "Job Created SucessFully", job);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(jobApiresponse);
+        Apiresponse<Job> jobApiresponse = new Apiresponse<>("Sucess", "Job Created SucessFully", job);
+        return ResponseEntity.status(HttpStatus.CREATED).body(jobApiresponse);
 
     }
 //

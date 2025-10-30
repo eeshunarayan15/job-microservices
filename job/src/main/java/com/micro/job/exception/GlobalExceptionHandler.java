@@ -2,6 +2,7 @@ package com.micro.job.exception;
 
 
 import com.micro.job.response.Apiresponse;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
     @ExceptionHandler(ServiceException.class)
     public ResponseEntity<Apiresponse<Object>> handleServiceException(ServiceException e) {
@@ -69,5 +71,13 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
+
+    @ExceptionHandler(ServiceUnavailableException.class)
+    public ResponseEntity<Apiresponse<Object>> handleServiceUnavailable(ServiceUnavailableException e) {
+        log.warn("Service temporarily unavailable: {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(new Apiresponse<>("ERROR", e.getMessage(), null));
+    }
+
 
 }

@@ -73,3 +73,8 @@ tasks.named('test') {
 bootBuildImage {
     builder = "paketobuildpacks/builder-jammy-base:latest"
 }
+bootJar {
+    layered {
+        enabled = true
+    }
+}

@@ -15,7 +15,7 @@ services:
     networks:
       - my-microservice-network
 
-  # 2. Config Server <--- UPDATED WITH HEALTHCHECK
+  # 2. Config Server
   configserver:
     container_name: configserver
     image: eeshunarayan15/configserver:latest
@@ -23,8 +23,8 @@ services:
       - "8088:8088"
     depends_on:
       eureka-server:
-        condition: service_healthy # Wait for Eureka to be healthy
-    healthcheck: # <--- NEW HEALTHCHECK
+        condition: service_healthy
+    healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8088/actuator/health"]
       interval: 10s
       timeout: 5s
@@ -43,7 +43,7 @@ services:
       eureka-server:
         condition: service_healthy
       configserver:
-        condition: service_healthy # <--- NOW WAITS FOR CONFIG SERVER HEALTHY
+        condition: service_healthy
     networks:
       - my-microservice-network
 
@@ -52,12 +52,11 @@ services:
     container_name: rabbitmq
     image: rabbitmq:3-management
     environment:
-      # These credentials are used by the 'company' service
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
     ports:
-      - "5672:5672"   # Standard AMQP port
-      - "15672:15672" # Management UI (http://localhost:15672)
+      - "5672:5672"
+      - "15672:15672"
     networks:
       - my-microservice-network
 
@@ -66,7 +65,7 @@ services:
     container_name: zipkin
     image: openzipkin/zipkin
     ports:
-      - "9411:9411" # Zipkin Web UI (http://localhost:9411)
+      - "9411:9411"
     networks:
       - my-microservice-network
 
@@ -75,7 +74,6 @@ services:
     container_name: companydb
     image: postgres:15
     environment:
-      # Database configuration matching application-docker.properties
       POSTGRES_USER: companyuser
       POSTGRES_PASSWORD: companypass
       POSTGRES_DB: companydb
@@ -96,7 +94,7 @@ services:
       eureka-server:
         condition: service_healthy
       configserver:
-        condition: service_healthy # <--- NOW WAITS FOR CONFIG SERVER HEALTHY
+        condition: service_healthy
       companydb:
         condition: service_started
       rabbitmq:
@@ -122,22 +120,23 @@ services:
     volumes:
       - job-data:/var/lib/postgresql/data
 
-  # 9. Job Microservice <--- DEPENDS ON HEALTHY CONFIG SERVER
+  # 9. Job Microservice - UPDATED WITH ENVIRONMENT VARIABLE
   job:
     container_name: job
     image: eeshunarayan15/job:latest
     ports:
       - "8082:8082"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker  # Profile set via environment variable
     depends_on:
       eureka-server:
         condition: service_healthy
       configserver:
-        condition: service_healthy # <--- NOW WAITS FOR CONFIG SERVER HEALTHY
+        condition: service_healthy
       zipkin:
         condition: service_started
       jobdb:
         condition: service_started
-    command: ["java", "-jar", "app.jar", "--spring.profiles.active=docker"]
     networks:
       - my-microservice-network
 
@@ -166,7 +165,7 @@ services:
       eureka-server:
         condition: service_healthy
       configserver:
-        condition: service_healthy # <--- NOW WAITS FOR CONFIG SERVER HEALTHY
+        condition: service_healthy
       zipkin:
         condition: service_started
       reviewdb:

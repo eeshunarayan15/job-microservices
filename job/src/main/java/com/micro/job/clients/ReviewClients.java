@@ -2,7 +2,6 @@ package com.micro.job.clients;
 
 import org.springframework.cloud.openfeign.FeignClient;
 
-@FeignClient(name = "REVIEW",
-        url="${company-service.url}")
+@FeignClient(name = "REVIEW")
 public interface ReviewClients {
 }

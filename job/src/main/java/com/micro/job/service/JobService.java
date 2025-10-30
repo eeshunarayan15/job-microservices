@@ -6,6 +6,7 @@ import com.micro.job.dto.AllJOBDto;
 import com.micro.job.dto.JobDto;
 import com.micro.job.dto.JobRequest;
 import com.micro.job.exception.ResourceNotFoundException;
+import com.micro.job.exception.ServiceUnavailableException;
 import com.micro.job.external.CompanyDto;
 import com.micro.job.model.Job;
 import com.micro.job.repository.JobRepository;
@@ -107,33 +108,74 @@ public class JobService {
         return jobDto;
     }
 
-    public Job createJob(JobRequest jobRequest) {
-        try {
-            CompanyDto company = restTemplate.getForObject(
-                    "http://COMPANY/api/v1/public/" + jobRequest.getCompanyId(),
-                    CompanyDto.class
-            );
+//    public Job createJob(JobRequest jobRequest) {
+//        try {
+//            CompanyDto company = restTemplate.getForObject(
+//                    "http://COMPANY/api/v1/public/" + jobRequest.getCompanyId(),
+//                    CompanyDto.class
+//            );
+//
+//            if (company == null) {
+//                throw new ResourceNotFoundException("Company not found with id: " + jobRequest.getCompanyId());
+//            }
+//        } catch (Exception e) {
+//            throw new ResourceNotFoundException("Company not found with id: " + jobRequest.getCompanyId());
+//        }
+//
+//        Job job = Job.builder()
+//                .title(jobRequest.getTitle())
+//                .description(jobRequest.getDescription())
+//                .minSalary(jobRequest.getMinSalary())
+//                .location(jobRequest.getLocation())
+//                .companyId(jobRequest.getCompanyId())
+//                .build();
+//
+//        return jobRepository.save(job);
+//
+//
+//    }
+//
 
-            if (company == null) {
-                throw new ResourceNotFoundException("Company not found with id: " + jobRequest.getCompanyId());
-            }
-        } catch (Exception e) {
-            throw new ResourceNotFoundException("Company not found with id: " + jobRequest.getCompanyId());
+
+
+
+
+    @CircuitBreaker(name = "companyBreaker", fallbackMethod = "createJobFallback")
+    @Retry(name = "companyBreaker")
+    public Job createJob(JobRequest req) {
+        log.info("Validating company existence: {}", req.getCompanyId());
+
+        // This call throws on 4xx/5xx → caught by CircuitBreaker
+        CompanyDto company = restTemplate.getForObject(
+                "http://COMPANY/api/v1/public/{id}",
+                CompanyDto.class,
+                req.getCompanyId());
+
+        // Only proceed if company exists
+        if (company == null) {
+            throw new ResourceNotFoundException("Company not found: " + req.getCompanyId());
         }
 
         Job job = Job.builder()
-                .title(jobRequest.getTitle())
-                .description(jobRequest.getDescription())
-                .minSalary(jobRequest.getMinSalary())
-                .location(jobRequest.getLocation())
-                .companyId(jobRequest.getCompanyId())
+                .title(req.getTitle())
+                .description(req.getDescription())
+                .minSalary(req.getMinSalary())
+                .location(req.getLocation())
+                .companyId(req.getCompanyId())
                 .build();
 
-        return jobRepository.save(job);
-
-
+        Job saved = jobRepository.save(job);
+        log.info("Job saved with ID: {}", saved.getId());
+        return saved;
     }
-//
+
+    // Fallback: COMPANY service is DOWN → fail, do NOT save
+    public Job createJobFallback(JobRequest req, Exception ex) {
+        log.error("Company service unavailable. Cannot validate companyId: {}. Aborting job creation.",
+                req.getCompanyId(), ex);
+
+        throw new ServiceUnavailableException("Company service is down. Please try again later.");
+    }
 //    public void deleteJob(Long id) {
 //        if (!jobRepository.existsById(id)) {
 //            throw new RuntimeException("Job with id " + id + " not found");
