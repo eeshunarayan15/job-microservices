@@ -1,0 +1,17 @@
+.gradle
+.git
+build/
+target/
+*.md
+.gitignore
+.DS_Store
+.idea/
+*.log
+*.swp
+*.swo
+*~
+.env
+.env.local
+node_modules/
+dist/
+coverage/

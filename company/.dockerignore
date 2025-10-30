@@ -1,0 +1,50 @@
+## 2. Updated .dockerignore
+```
+# Gradle
+.gradle/
+build/
+!build/libs/*.jar
+gradle-app.setting
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+
+# IDE
+.idea/
+*.iml
+.project
+.classpath
+.settings/
+.vscode/
+*.swp
+*.bak
+*.tmp
+*.orig
+*~.nib
+out/
+
+# OS
+.DS_Store
+Thumbs.db
+*.pid
+*.seed
+*.pid.lock
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# Logs
+*.log
+logs/
+
+# Other
+README.md
+LICENSE
+.env
+*.md

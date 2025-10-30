@@ -17,6 +17,7 @@ import java.util.List;
 import static org.springframework.http.ResponseEntity.status;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/public")
 @RequiredArgsConstructor
 public class JobController {

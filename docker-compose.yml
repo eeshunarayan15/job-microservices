@@ -142,40 +142,40 @@ services:
       - my-microservice-network
 
   # 10. Review Database (PostgreSQL)
-#  reviewdb:
-#    container_name: reviewdb
-#    image: postgres:15
-#    environment:
-#      POSTGRES_USER: reviewuser
-#      POSTGRES_PASSWORD: reviewpass
-#      POSTGRES_DB: reviewdb
-#    ports:
-#      - "5434:5432"
-#    networks:
-#      - my-microservice-network
-#    volumes:
-#      - review-data:/var/lib/postgresql/data
-#
-#  # 11. Review Microservice
-#  review:
-#    container_name: review
-#    image: eeshunarayan15/review:latest
-#    ports:
-#      - "8083:8083"
-#    depends_on:
-#      eureka-server:
-#        condition: service_healthy
-#      configserver:
-#        condition: service_healthy # <--- NOW WAITS FOR CONFIG SERVER HEALTHY
-#      zipkin:
-#        condition: service_started
-#      reviewdb:
-#        condition: service_started
-#      rabbitmq:
-#        condition: service_started
-#    command: ["java", "-jar", "app.jar", "--spring.profiles.active=docker"]
-#    networks:
-#      - my-microservice-network
+  reviewdb:
+    container_name: reviewdb
+    image: postgres:15
+    environment:
+      POSTGRES_USER: reviewuser
+      POSTGRES_PASSWORD: reviewpass
+      POSTGRES_DB: reviewdb
+    ports:
+      - "5434:5432"
+    networks:
+      - my-microservice-network
+    volumes:
+      - review-data:/var/lib/postgresql/data
+
+  # 11. Review Microservice
+  review:
+    container_name: review
+    image: eeshunarayan15/review:latest
+    ports:
+      - "8083:8083"
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+      configserver:
+        condition: service_healthy # <--- NOW WAITS FOR CONFIG SERVER HEALTHY
+      zipkin:
+        condition: service_started
+      reviewdb:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+    command: ["java", "-jar", "app.jar", "--spring.profiles.active=docker"]
+    networks:
+      - my-microservice-network
 
 
 # Define the shared network
@@ -187,4 +187,4 @@ networks:
 volumes:
   company-data:
   job-data:
-#  review-data:
+  review-data:

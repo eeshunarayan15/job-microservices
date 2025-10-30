@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 @RequestMapping("/public")
 @Slf4j
 public class CompanyController {
