@@ -1,20 +1,42 @@
-# Stage 1: Build the application
-FROM gradle:8.5.0-jdk17 AS build
-WORKDIR /home/gradle/src
+# Build stage with GraalVM
+FROM ghcr.io/graalvm/native-image-community:17 AS build
 
+RUN microdnf install -y findutils
+
+WORKDIR /build
+
+COPY gradlew .
+COPY gradle ./gradle
 COPY build.gradle settings.gradle ./
-COPY src ./src
-RUN gradle build bootJar --no-daemon
 
-# Stage 2: Create the final, lightweight image
-FROM eclipse-temurin:17-jre-jammy
+RUN chmod +x gradlew && ./gradlew dependencies --no-daemon
+
+COPY src ./src
+
+# Build with increased memory
+RUN ./gradlew nativeCompile --no-daemon -Dorg.gradle.jvmargs="-Xmx8g"
+
+# Run stage
+FROM ubuntu:22.04
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN useradd -m -u 1001 appuser
+
 WORKDIR /app
 
-# Copy only the built .jar file from the 'build' stage
-COPY --from=build /home/gradle/src/build/libs/*.jar app.jar
+COPY --from=build /build/build/native/nativeCompile/apigateway-service ./app
 
-# Expose the correct port from your properties
+RUN chmod +x ./app && chown appuser:appuser ./app
+
+USER appuser
+
 EXPOSE 8085
 
-# ✅ Let Render (or any environment) set SPRING_PROFILES_ACTIVE
-ENTRYPOINT ["java", "-jar", "app.jar"]
+HEALTHCHECK --interval=30s --timeout=3s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:8085/actuator/health || exit 1
+
+ENTRYPOINT ["./app"]

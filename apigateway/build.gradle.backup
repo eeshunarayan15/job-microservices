@@ -1,9 +1,8 @@
-
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.5.6'
     id 'io.spring.dependency-management' version '1.1.7'
-    id 'org.graalvm.buildtools.native' version '0.10.3'
+    id 'org.graalvm.buildtools.native' version '0.10.3' // ⬆️ Updated version
 }
 
 group = 'com.micro'
@@ -28,7 +27,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'io.micrometer:micrometer-tracing-bridge-brave'
     implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
+
+    // Gateway
     implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
+
+    // Kubernetes Discovery
     implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes-fabric8-all'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -50,17 +53,21 @@ graalvmNative {
         main {
             imageName = 'apigateway-service'
 
-            // Memory-optimized settings
-            buildArgs.add('--no-fallback')
+            // Basic options
+            buildArgs.add('--verbose')
             buildArgs.add('-H:+ReportExceptionStackTraces')
-            buildArgs.add('-O1')  // Lower optimization = less memory
-            buildArgs.add('--gc=serial')  // Use serial GC
+            buildArgs.add('--no-fallback')
+
+            // Memory settings for build
+            buildArgs.add('-J-Xmx8g') // Increase if build fails
+
+            // Required for Spring Cloud Gateway + Netty
             buildArgs.add('-H:+AddAllCharsets')
             buildArgs.add('--enable-url-protocols=http,https')
 
-            // JVM options for the build process
-            jvmArgs.add('-Xmx6g')
-            jvmArgs.add('-XX:+UseSerialGC')
+            // Remove these problematic flags:
+            // ❌ buildArgs.add('--initialize-at-build-time=...')
+            // ❌ buildArgs.add('--allow-incomplete-classpath')
         }
     }
 }
