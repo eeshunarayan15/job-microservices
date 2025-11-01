@@ -2,7 +2,8 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.5.6'
     id 'io.spring.dependency-management' version '1.1.7'
-    id 'org.graalvm.buildtools.native' version '0.10.3'
+    // Remove GraalVM plugin
+    // id 'org.graalvm.buildtools.native' version '0.10.3'
 }
 
 group = 'com.micro'
@@ -27,10 +28,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'io.micrometer:micrometer-tracing-bridge-brave'
     implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
-    // Use correct dependency: WebFlux-based Gateway
-    implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
+    implementation 'org.springframework.cloud:spring-cloud-starter-gateway-server-webmvc'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
@@ -45,34 +44,10 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-// === DISABLE AOT PROCESSING (Gradle Groovy) ===
-bootJar {
-    enabled = true
+springBoot {
+    buildInfo()
 }
 
-// Disable native image build if not needed
-bootBuildImage {
-    enabled = false
-}
-
-// Disable AOT tasks
-tasks.withType(org.springframework.boot.build.NativeImageTask).configureEach {
-    enabled = false
-}
-// ==============================================
-
-graalvmNative {
-    binaries {
-        main {
-            imageName = 'apigateway-service'
-            buildArgs.add('--no-fallback')
-            buildArgs.add('-H:+ReportExceptionStackTraces')
-            buildArgs.add('-O1')
-            buildArgs.add('--gc=serial')
-            buildArgs.add('-H:+AddAllCharsets')
-            buildArgs.add('--enable-url-protocols=http,https')
-            buildArgs.add('--initialize-at-build-time=org.slf4j,io.micrometer,io.zipkin')
-            jvmArgs.add('-Xmx6g')
-        }
-    }
-}
+// Remove all GraalVM and AOT configurations
+// springAot { ... }
+// graalvmNative { ... }
