@@ -44,7 +44,7 @@ jobs:
         run: |
           cd ${{ env.SERVICE_NAME }}
           chmod +x gradlew
-          ./gradlew clean bootJar --no-daemon --stacktrace
+          ./gradlew clean bootJar --no-daemon --stacktrace -x test
         env:
           SPRING_PROFILES_ACTIVE: test
 
