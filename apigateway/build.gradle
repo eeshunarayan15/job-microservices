@@ -27,7 +27,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'io.micrometer:micrometer-tracing-bridge-brave'
     implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
-    implementation 'org.springframework.cloud:spring-cloud-starter-gateway-server-webmvc'
+    // Use correct dependency: WebFlux-based Gateway
+    implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -44,21 +45,26 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-// === CRITICAL: Disable AOT for RefreshScope compatibility ===
-springBoot {
-    buildInfo()
+// === DISABLE AOT PROCESSING (Gradle Groovy) ===
+bootJar {
+    enabled = true
 }
 
-springAot {
+// Disable native image build if not needed
+bootBuildImage {
     enabled = false
 }
-// ===========================================================
+
+// Disable AOT tasks
+tasks.withType(org.springframework.boot.build.NativeImageTask).configureEach {
+    enabled = false
+}
+// ==============================================
 
 graalvmNative {
     binaries {
         main {
             imageName = 'apigateway-service'
-
             buildArgs.add('--no-fallback')
             buildArgs.add('-H:+ReportExceptionStackTraces')
             buildArgs.add('-O1')
@@ -66,7 +72,6 @@ graalvmNative {
             buildArgs.add('-H:+AddAllCharsets')
             buildArgs.add('--enable-url-protocols=http,https')
             buildArgs.add('--initialize-at-build-time=org.slf4j,io.micrometer,io.zipkin')
-
             jvmArgs.add('-Xmx6g')
         }
     }
