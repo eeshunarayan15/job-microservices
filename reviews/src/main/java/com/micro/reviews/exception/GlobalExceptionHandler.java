@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.net.SocketTimeoutException;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(ServiceException.class)
@@ -44,9 +47,35 @@ public class GlobalExceptionHandler {
                 .body(new Apiresponse<>("Error", "Company not found in external service", null));
     }
 
+//    @ExceptionHandler(FeignException.class)
+//    public ResponseEntity<Apiresponse<Object>> handleFeignException(FeignException e) {
+//        return ResponseEntity.status(e.status())
+//                .body(new Apiresponse<>("Error", "External service error: " + e.getMessage(), null));
+//    }
     @ExceptionHandler(FeignException.class)
     public ResponseEntity<Apiresponse<Object>> handleFeignException(FeignException e) {
-        return ResponseEntity.status(e.status())
+        // Check if status is valid (between 100-599), otherwise use 503
+        int status = e.status();
+        HttpStatus httpStatus;
+
+        if (status >= 100 && status < 600) {
+            httpStatus = HttpStatus.valueOf(status);
+        } else {
+            // Invalid status code (like -1 for timeout), use SERVICE_UNAVAILABLE
+            httpStatus = HttpStatus.SERVICE_UNAVAILABLE;
+        }
+
+        return ResponseEntity.status(httpStatus)
                 .body(new Apiresponse<>("Error", "External service error: " + e.getMessage(), null));
+    }
+    @ExceptionHandler(SocketTimeoutException.class)
+    public ResponseEntity<Apiresponse<Object>> handleSocketTimeoutException(SocketTimeoutException e) {
+        return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT)
+                .body(new Apiresponse<>("Error", "Connection timeout. The service is taking too long to respond.", null));
+    }
+    @ExceptionHandler(feign.RetryableException.class)
+    public ResponseEntity<Apiresponse<Object>> handleRetryableException(feign.RetryableException e) {
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(new Apiresponse<>("Error", "Service temporarily unavailable. Please try again later.", null));
     }
 }

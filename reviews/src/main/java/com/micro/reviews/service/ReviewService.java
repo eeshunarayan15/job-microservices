@@ -32,20 +32,15 @@ public class ReviewService {
             long startTime = System.currentTimeMillis();
             Apiresponse<CompanyDto> companyById = companyClients.getCompanyById(companyId);
 
-            System.out.println("Response from company service: " + companyById);
-            if (companyById != null) {
-                System.out.println("Data field: " + companyById.getData());
-                System.out.println("Message field: " + companyById.getMessage());
-            } else {
-                System.out.println("companyById is null (Feign returned null)");
-            }
+        log.debug("Response from company service: {}", companyById);
+        log.debug("Company response - Data: {}, Message: {}",
+                companyById.getData(), companyById.getMessage());
 
             if (companyById.getData() == null) {
                 throw new ResourceNotFoundException("Company not found with id: " + companyId);
             }
 
-            System.out.println(companyById.getData());
-
+        log.debug("Company data: {}", companyById.getData());
 
 
         List<Review> reviewList = reviewRepository.findByCompanyId(companyId);
@@ -73,10 +68,10 @@ return  list;
     public Review createReview(Long companyId, ReviewRequest reviewRequest) {
         Apiresponse<CompanyDto> companyById = companyClients.getCompanyById(companyId);
         CompanyDto data = companyById.getData();
-        if (companyById.getData() == null) {
+
+        if (data == null) {
             throw new ResourceNotFoundException("Company not found with id: " + companyId);
         }
-
         Review review = Review.builder()
                 .title(reviewRequest.getTitle())
                 .description(reviewRequest.getDescription())
