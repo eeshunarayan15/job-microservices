@@ -44,20 +44,29 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+// === CRITICAL: Disable AOT for RefreshScope compatibility ===
+springBoot {
+    buildInfo()
+}
+
+springAot {
+    enabled = false
+}
+// ===========================================================
+
 graalvmNative {
     binaries {
         main {
             imageName = 'apigateway-service'
 
-            // Native image build arguments
             buildArgs.add('--no-fallback')
             buildArgs.add('-H:+ReportExceptionStackTraces')
-            buildArgs.add('-O1')  // Lower optimization = less memory
-            buildArgs.add('--gc=serial')  // Use serial GC
+            buildArgs.add('-O1')
+            buildArgs.add('--gc=serial')
             buildArgs.add('-H:+AddAllCharsets')
             buildArgs.add('--enable-url-protocols=http,https')
+            buildArgs.add('--initialize-at-build-time=org.slf4j,io.micrometer,io.zipkin')
 
-            // JVM options for the build process
             jvmArgs.add('-Xmx6g')
         }
     }

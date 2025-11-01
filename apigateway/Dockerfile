@@ -1,54 +1,45 @@
-# Build stage with GraalVM
-FROM ghcr.io/graalvm/native-image-community:17 AS build
+# Build stage with GraalVM Java 21
+FROM ghcr.io/graalvm/native-image-community:21 AS build
 
 # Install required build tools
 RUN microdnf install -y findutils
 
 WORKDIR /build
 
-# Copy gradle wrapper
-COPY gradlew gradlew.bat ./
+# Copy Gradle wrapper and config
+COPY gradlew .
 COPY gradle ./gradle
-
-# Copy build files
-COPY build.gradle settings.gradle* ./
+COPY build.gradle settings.gradle ./
 
 # Download dependencies (cached layer)
-RUN chmod +x gradlew && ./gradlew dependencies --no-daemon || true
+RUN chmod +x gradlew && ./gradlew dependencies --no-daemon
 
 # Copy source code
 COPY src ./src
 
-# Build native image with increased memory
-RUN ./gradlew nativeCompile --no-daemon -Dorg.gradle.jvmargs="-Xmx8g -XX:MaxMetaspaceSize=2g"
+# Build native image
+# Note: Use nativeCompile (Gradle plugin task)
+RUN ./gradlew nativeCompile --no-daemon
 
-# Run stage
+# Runtime stage - minimal image
 FROM ubuntu:22.04
 
-# Install runtime dependencies
+# Install only runtime essentials
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
-    curl \
     && rm -rf /var/lib/apt/lists/*
-
-# Create non-root user
-RUN useradd -m -u 1001 appuser
 
 WORKDIR /app
 
-# Copy the native executable
+# Copy native executable from build stage
 COPY --from=build /build/build/native/nativeCompile/apigateway-service ./app
 
-# Set permissions
-RUN chmod +x ./app && chown appuser:appuser ./app
+# Make it executable
+RUN chmod +x ./app
 
-# Switch to non-root user
-USER appuser
-
+# Expose port (adjust if needed)
 EXPOSE 8085
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=60s --retries=3 \
-    CMD curl -f http://localhost:8085/actuator/health || exit 1
-
+# Let Render (or any platform) inject profile via ENV
+# e.g., SPRING_PROFILES_ACTIVE=prod
 ENTRYPOINT ["./app"]
