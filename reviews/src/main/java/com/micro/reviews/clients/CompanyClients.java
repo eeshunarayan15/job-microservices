@@ -4,8 +4,7 @@ import com.micro.reviews.response.Apiresponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-@FeignClient(name = "COMPANY",
-        url="${company-service.url}")
+@FeignClient(name = "COMPANY")
 public interface CompanyClients {
     @GetMapping("/api/v1/public/{id}")
     Apiresponse<CompanyDto> getCompanyById(@PathVariable Long id) ;
