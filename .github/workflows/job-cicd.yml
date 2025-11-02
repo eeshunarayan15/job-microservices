@@ -13,7 +13,7 @@ on:
 
 env:
   SERVICE_NAME: job
-  DOCKER_IMAGE: eeshunarayan15/job
+  DOCKER_IMAGE: eeshunarayan15/job-service
 
 jobs:
   build-and-push:
