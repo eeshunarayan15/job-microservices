@@ -1,6 +1,7 @@
 package com.micro.company.exception;
 
 import com.micro.company.respone.Apiresponse;
+import feign.FeignException;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -61,5 +62,21 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    // Handle Feign exceptions (e.g., when another microservice is down)
+    @ExceptionHandler(FeignException.class)
+    public ResponseEntity<Apiresponse<Object>> handleFeignException(FeignException e) {
+        String errorMessage = "Failed to communicate with another service: " + e.contentUTF8();
+
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(new Apiresponse<>("Error", errorMessage, null));
+    }
+
+    // Handle unknown host or connection issues
+    @ExceptionHandler({java.net.ConnectException.class, java.net.UnknownHostException.class})
+    public ResponseEntity<Apiresponse<Object>> handleConnectionExceptions(Exception e) {
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(new Apiresponse<>("Error", "Service temporarily unavailable: " + e.getMessage(), null));
     }
 }

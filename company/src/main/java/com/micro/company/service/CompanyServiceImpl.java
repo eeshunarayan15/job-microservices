@@ -8,8 +8,10 @@ import com.micro.company.exception.ResourceNotFoundException;
 import com.micro.company.model.Company;
 import com.micro.company.repository.CompanyRepository;
 import com.micro.company.respone.Apiresponse;
+import com.micro.company.util.CacheService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,8 +23,10 @@ import java.util.Optional;
 public class CompanyServiceImpl implements CompanyService {
     private final CompanyRepository companyRepository;
     private  final ReviewClient reviewClient;
+    private final CacheService cacheService;
 
     @Override
+    @Cacheable("companies_all")
     public List<CompanyDto> getAllCompany() {
         List<Company> all = companyRepository.findAll();
         List<CompanyDto> list = all.stream().map(company ->
@@ -59,11 +63,13 @@ public class CompanyServiceImpl implements CompanyService {
 
         log.info("Company created successfully with ID: {} and name: {}",
                 savedCompany.getId(), savedCompany.getName());
-
+        // ✅ Clear cached list after a new company is added
+        cacheService.clearAllCompaniesCache();
         return savedCompany;
     }
 
     @Override
+    @Cacheable(value = "companies", key = "#id")
     public Company getCompanyById(Long id) {
         return companyRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Company does not exist"));
 
@@ -87,5 +93,7 @@ public class CompanyServiceImpl implements CompanyService {
         Double rating = averageRating.getData();
         company.setAveragerating(rating);
         companyRepository.save(company);
+        cacheService.clearAllCompaniesCache();
+        log.info("Updated rating for company {} and evicted caches", company.getName());
     }
 }
