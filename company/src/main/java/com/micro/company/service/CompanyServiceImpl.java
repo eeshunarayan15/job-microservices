@@ -28,6 +28,7 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     @Cacheable("companies_all")
     public List<CompanyDto> getAllCompany() {
+        log.info("getAllCompany");
         List<Company> all = companyRepository.findAll();
         List<CompanyDto> list = all.stream().map(company ->
                 new CompanyDto(
@@ -36,6 +37,7 @@ public class CompanyServiceImpl implements CompanyService {
                         company.getDescription(),
                         company.getAveragerating()
                 )).toList();
+        System.out.println(list);
         return list;
     }
 
