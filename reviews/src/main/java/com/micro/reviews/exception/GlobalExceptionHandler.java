@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.net.SocketTimeoutException;
 @Slf4j
@@ -94,4 +95,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
                 .body(new Apiresponse<>("Error", "Service temporarily unavailable. Please try again later.", null));
     }
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<Apiresponse<Object>> handleNoResourceFound(NoResourceFoundException e) {
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new Apiresponse<>("Error", "Resource not found: " + e.getMessage(), null));
+    }
+
 }
