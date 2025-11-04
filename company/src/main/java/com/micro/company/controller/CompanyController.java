@@ -55,5 +55,8 @@ public class CompanyController {
 //        companyService.deleteCompany(id);
 //        return ResponseEntity.ok(new Apiresponse<>("Success", "Company deleted successfully", null));
 //    }
-
+@GetMapping("test")
+    public  String test(){
+        return "Hello word!";
+    }
 }
