@@ -57,6 +57,10 @@ public class ReviewController {
         return  ResponseEntity.status(HttpStatus.OK).body(doubleApiresponse);
 
     }
+    @GetMapping("/test")
+    public String test() {
+        return "Hello World";
+    }
 
 }
 
