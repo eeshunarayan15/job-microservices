@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name = "REVIEW")
 public interface ReviewClient {
-    @GetMapping("/api/v1/reviews/averageRating")
+    @GetMapping("/reviews/averageRating")
     public Apiresponse<Double> getAverageRating(@RequestParam Long companyId) ;
 
 }

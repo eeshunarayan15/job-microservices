@@ -1,67 +1,20 @@
 version: '3.8'
 
 services:
-  # 1. Eureka Service Registry (No change needed)
-  eureka-server:
-    container_name: eureka-server
-    image: eeshunarayan15/registry:latest
-    ports:
-      - "8761:8761"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-    networks:
-      - my-microservice-network
-
-  # 2. Config Server (No change needed)
-  configserver:
-    container_name: configserver
-    image: eeshunarayan15/configserver:latest
-    ports:
-      - "8088:8088"
-    depends_on:
-      eureka-server:
-        condition: service_healthy
-    command: ["java", "-jar", "app.jar", "--spring.profiles.active=docker"]
-    networks:
-      - my-microservice-network
-
-  # 3. API Gateway (No change needed)
-  apigateway:
-    container_name: apigateway
-    image: eeshunarayan15/apigateway:latest
-    ports:
-      - "8080:8085"
-    depends_on:
-      eureka-server:
-        condition: service_healthy
-      configserver:
-        condition: service_started
-    networks:
-      - my-microservice-network
-
-  # -----------------------------------------------------
-  # New Infrastructure Services
-  # -----------------------------------------------------
-
-  # 4. RabbitMQ Message Broker
+  # 1. RabbitMQ Message Broker
   rabbitmq:
     container_name: rabbitmq
-    # Use the management image to get the web interface
     image: rabbitmq:3-management
     environment:
-      # These credentials are used by the 'company' service
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
     ports:
-      - "5672:5672"   # Standard AMQP port for applications
+      - "5672:5672"   # AMQP port for applications
       - "15672:15672" # Management UI (http://localhost:15672)
     networks:
       - my-microservice-network
 
-  # 5. Zipkin Distributed Tracing Server
+  # 2. Zipkin Distributed Tracing Server
   zipkin:
     container_name: zipkin
     image: openzipkin/zipkin
@@ -70,47 +23,52 @@ services:
     networks:
       - my-microservice-network
 
-  # 6. Company Database (PostgreSQL)
+  # 3. Company Database (PostgreSQL)
   companydb:
     container_name: companydb
     image: postgres:15
     environment:
-      # Set up database credentials/name for the Spring application
       POSTGRES_USER: companyuser
       POSTGRES_PASSWORD: companypass
       POSTGRES_DB: companydb
     ports:
-      # Expose for host debugging/tools only
       - "5432:5432"
     networks:
       - my-microservice-network
-    # Persist data using a named volume
     volumes:
       - company-data:/var/lib/postgresql/data
 
-  # 7. Company Microservice
-  company:
-    container_name: company
-    image: eeshunarayan15/company:latest
+  # 4. Reviews Database (PostgreSQL)
+  reviewdb:
+    container_name: reviewdb
+    image: postgres:15
+    environment:
+      POSTGRES_USER: reviewuser
+      POSTGRES_PASSWORD: reviewpass
+      POSTGRES_DB: reviewdb
     ports:
-      - "8081:8081"
-    depends_on:
-      # Ensure core services are running
-      eureka-server:
-        condition: service_healthy
-      configserver:
-        condition: service_started
-      # Ensure dedicated dependencies are running
-      companydb:
-        condition: service_started
-      rabbitmq:
-        condition: service_started
-      zipkin:
-        condition: service_started
+      - "5433:5432"
     networks:
       - my-microservice-network
+    volumes:
+      - review-data:/var/lib/postgresql/data
 
-# Define the network (must match the existing network name)
+  # 5. Job Database (PostgreSQL)
+  jobdb:
+    container_name: jobdb
+    image: postgres:15
+    environment:
+      POSTGRES_USER: jobuser
+      POSTGRES_PASSWORD: jobpass
+      POSTGRES_DB: jobdb
+    ports:
+      - "5434:5432"
+    networks:
+      - my-microservice-network
+    volumes:
+      - job-data:/var/lib/postgresql/data
+
+# Define the network
 networks:
   my-microservice-network:
     external: true
@@ -118,3 +76,5 @@ networks:
 # Define volumes for persistent storage
 volumes:
   company-data:
+  review-data:
+  job-data:
