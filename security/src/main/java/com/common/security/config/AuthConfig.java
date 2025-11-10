@@ -13,24 +13,34 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import com.common.security.filter.JwtAuthenticationFilter;
 
 @Configuration
 @RequiredArgsConstructor
 public class AuthConfig {
 
     private final UserDetailsService userDetailsService;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter; // Inject the filter
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.disable()) // Disable CSRF for stateless JWT
                 .authorizeHttpRequests(auth -> auth
+                        // Public endpoints - no authentication required
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/public/**").permitAll()
+                        .requestMatchers("/error").permitAll()
+
+                        // All other endpoints require authentication
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // No sessions
                 )
+                // ⭐ KEY ADDITION: Register JWT filter BEFORE Spring Security's authentication filter
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
     @Bean

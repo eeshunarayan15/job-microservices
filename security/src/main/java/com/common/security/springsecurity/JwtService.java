@@ -18,10 +18,10 @@ import java.util.Map;
 @Component
 public class JwtService {
 
-    @Value("${jwt.secret:5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437}")
+    @Value("${jwt.secret}")
     private String secret;
 
-    @Value("${jwt.expiration:1800000}") // 30 minutes in milliseconds
+    @Value("${jwt.expiration}") // 30 minutes in milliseconds
     private long jwtExpiration;
 
     public void validateToken(final String token) {
@@ -93,6 +93,7 @@ public class JwtService {
 
     public Boolean isTokenExpired(String token) {
         boolean expired = extractExpiration(token).before(new Date());
+
         log.debug("Token expiration check: {}", expired ? "expired" : "valid");
         return expired;
     }
