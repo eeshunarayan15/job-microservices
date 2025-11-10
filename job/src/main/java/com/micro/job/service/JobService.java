@@ -60,7 +60,7 @@ public class JobService {
         Job job = jobRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Job not found"));
         CompanyDto company = restTemplate.getForObject(
-                "http://COMPANY/api/v1/public/" + job.getCompanyId(),
+                "http://COMPANY/public/" + job.getCompanyId(),
                 CompanyDto.class
         );
 
@@ -111,7 +111,7 @@ public class JobService {
 //    public Job createJob(JobRequest jobRequest) {
 //        try {
 //            CompanyDto company = restTemplate.getForObject(
-//                    "http://COMPANY/api/v1/public/" + jobRequest.getCompanyId(),
+//                    "http://COMPANY/public/" + jobRequest.getCompanyId(),
 //                    CompanyDto.class
 //            );
 //
@@ -147,7 +147,7 @@ public class JobService {
 
         // This call throws on 4xx/5xx → caught by CircuitBreaker
         CompanyDto company = restTemplate.getForObject(
-                "http://COMPANY/api/v1/public/{id}",
+                "http://COMPANY/public/{id}",
                 CompanyDto.class,
                 req.getCompanyId());
 
