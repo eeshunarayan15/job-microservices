@@ -68,6 +68,21 @@ services:
     volumes:
       - job-data:/var/lib/postgresql/data
 
+  # 5. Security Database (PostgreSQL)
+  Securitydb:
+    container_name: Securitydb
+    image: postgres:15
+    environment:
+      POSTGRES_USER: security
+      POSTGRES_PASSWORD: securitypass
+      POSTGRES_DB: Securitydb
+    ports:
+      - "5435:5432"
+    networks:
+      - my-microservice-network
+    volumes:
+      - security-data:/var/lib/postgresql/data
+
 # Define the network
 networks:
   my-microservice-network:
@@ -78,3 +93,4 @@ volumes:
   company-data:
   review-data:
   job-data:
+  security-data:
