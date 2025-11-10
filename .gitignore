@@ -1,3 +1,5 @@
 company/company.env
 job/job.env
 reviews/review.env
+.idea
+.vscode
