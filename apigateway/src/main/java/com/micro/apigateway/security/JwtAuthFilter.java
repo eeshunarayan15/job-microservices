@@ -33,50 +33,60 @@ public class JwtAuthFilter extends AbstractGatewayFilterFactory<JwtAuthFilter.Co
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
 
+            log.info("=== JwtAuthFilter Triggered ===");
+            log.info("Request URI: {}", exchange.getRequest().getURI());
+            log.info("Request Path: {}", exchange.getRequest().getPath());
+            log.info("Request Method: {}", exchange.getRequest().getMethod());
+
             if(routeValidator.isSecured.test(exchange.getRequest())) {
-                log.debug("Processing secured route: {}", exchange.getRequest().getURI());
+                log.info("✓ Route is SECURED - JWT validation required");
 
                 // Check Authorization header exists
                 if(!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
-                    log.warn("Missing Authorization header");
+                    log.warn("✗ Missing Authorization header");
                     return onError(exchange, "Missing Authorization header", HttpStatus.UNAUTHORIZED);
-                    //     ^^^^^^^ Calling the helper method below
                 }
 
                 // Extract Authorization header
                 String authHeader = exchange.getRequest().getHeaders()
                         .get(HttpHeaders.AUTHORIZATION).get(0);
 
+                log.info("Authorization header found: {}", authHeader.substring(0, Math.min(20, authHeader.length())) + "...");
+
                 // Validate Bearer format
                 if(authHeader == null || !authHeader.startsWith("Bearer ")) {
-                    log.warn("Invalid Authorization header format");
+                    log.warn("✗ Invalid Authorization header format");
                     return onError(exchange, "Invalid Authorization header format", HttpStatus.UNAUTHORIZED);
-                    //     ^^^^^^^ Calling the helper method below
                 }
 
                 // Extract token
                 String token = authHeader.substring(7);
+                log.info("Token extracted, length: {} chars", token.length());
 
                 // Validate JWT token
                 try {
                     jwtService.validateToken(token);
-                    log.debug("JWT token validated successfully");
+                    log.info("✓ JWT token validated successfully");
                 } catch (ExpiredJwtException e) {
-                    log.error("JWT token expired: {}", e.getMessage());
+                    log.error("✗ JWT token expired: {}", e.getMessage());
                     return onError(exchange, "JWT token has expired", HttpStatus.UNAUTHORIZED);
-                    //     ^^^^^^^ Calling the helper method below
                 } catch (SignatureException e) {
-                    log.error("Invalid JWT signature: {}", e.getMessage());
+                    log.error("✗ Invalid JWT signature: {}", e.getMessage());
                     return onError(exchange, "Invalid JWT signature", HttpStatus.UNAUTHORIZED);
                 } catch (MalformedJwtException e) {
-                    log.error("Malformed JWT token: {}", e.getMessage());
+                    log.error("✗ Malformed JWT token: {}", e.getMessage());
                     return onError(exchange, "Malformed JWT token", HttpStatus.UNAUTHORIZED);
                 } catch (Exception e) {
-                    log.error("JWT validation failed: {}", e.getMessage());
+                    log.error("✗ JWT validation failed: {}", e.getMessage());
+                    log.error("Exception type: {}", e.getClass().getName());
+                    e.printStackTrace(); // Print full stack trace
                     return onError(exchange, "JWT authentication failed", HttpStatus.UNAUTHORIZED);
                 }
+            } else {
+                log.info("○ Route is NOT SECURED - skipping JWT validation");
             }
 
+            log.info("→ Proceeding to next filter/service");
             return chain.filter(exchange);
         };
     }
