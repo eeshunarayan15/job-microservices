@@ -3,6 +3,7 @@ package com.common.security.service;
 import com.common.security.dto.UserCredentialDto;
 import com.common.security.entity.Role;
 import com.common.security.entity.UserCredential;
+import com.common.security.exception.UserAlreadyExistsException;
 import com.common.security.repository.UserCredentialRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public UserCredential createUser(UserCredentialDto userCredentialDto) {
         if (userCredentialRepository.findByEmail(userCredentialDto.getEmail()).isPresent()) {
-            throw new RuntimeException("User already exists with this email");
+            throw new UserAlreadyExistsException("User already exists with this email");
         }
         UserCredential user = UserCredential.builder()
                 .email(userCredentialDto.getEmail())
